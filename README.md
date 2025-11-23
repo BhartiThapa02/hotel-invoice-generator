@@ -1,9 +1,8 @@
 Hotel Invoice Generator – Modern Flask Billing System
 
-<strong>
-A clean, modern and production-ready hotel invoice generator built with Flask — featuring dynamic line-item management, real-time total calculations, and highly polished PDF invoice generation.</strong> </p>
+<p><strong>A clean, modern and production-ready hotel invoice generator built with Flask — featuring dynamic line-item management, real-time total calculations, and highly polished PDF invoice generation.</strong></p>
 
-<p align="center"> <img src="https://img.shields.io/badge/FLASK-000000?style=flat-square&logo=flask&logoColor=white"> <img src="https://img.shields.io/badge/PYTHON-14354C?style=flat-square&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/BOOTSTRAP-7952B3?style=flat-square&logo=bootstrap&logoColor=white"> <img src="https://img.shields.io/badge/PDF_ENGINE-DC143C?style=flat-square&logo=adobeacrobatreader&logoColor=white"> <img src="https://img.shields.io/badge/SaaS-Ready-00A67F?style=flat-square"> </p> <p align="center">  
+<p align="center"> <img src="https://img.shields.io/badge/FLASK-000000?style=flat-square&logo=flask&logoColor=white"> <img src="https://img.shields.io/badge/PYTHON-14354C?style=flat-square&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/BOOTSTRAP-7952B3?style=flat-square&logo=bootstrap&logoColor=white"> <img src="https://img.shields.io/badge/PDF_ENGINE-DC143C?style=flat-square&logo=adobeacrobatreader&logoColor=white"> <img src="https://img.shields.io/badge/SaaS-Ready-00A67F?style=flat-square"></p>  
 
 <hr>
 
@@ -27,17 +26,11 @@ A clean, modern and production-ready hotel invoice generator built with Flask �
 
 📸 Screenshots
 
+<p align="center"> <img src="static/screenshots/generated-invoice.png" width="90%"> </p>
 
-<img src="screenshots/hotel-dashboard.png" width="90%" style="border-radius: 12px;"><br>
-
-<hr> <br>
-
-<img src="screenshots/generated-invoice.png" width="90%" style="border-radius: 12px;"><br>
-
+<p align="center"> <img src="static/screenshots/hotel-dashboard.png" width="90%"> </p>
 
 <hr>
-
-<br>
 
 ⚙️ Tech Stack
 
@@ -126,4 +119,5 @@ This project is licensed under the MIT License.
 If you like this project, consider giving it a ⭐ on GitHub — it helps a lot!
 
 <hr>
+
 
