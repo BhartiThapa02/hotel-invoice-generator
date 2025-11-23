@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Invoice Generator</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: url('{{ url_for("static", filename="photo.png") }}') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .overlay {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.25);
+            padding: 20px;
+            max-width: 85%; /* Reduced width for more background visibility */
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            margin: 20px auto; /* Added top/bottom margins and centering */
+        }
+
+        .logo {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+
+        .header-text {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            border: 2px solid #000;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 5px;
+        }
+
+        .section h3 {
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .item-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+        }
+
+        .item-field {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .item-field label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .item-field input {
+            width: 100%;
+            border: 1px solid #000;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #000;
+            border: none;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            border-radius: 5px;
+        }
+
+       
+        @media (max-width: 768px) {
+            .overlay {
+                padding: 15px;
+                margin: 10px auto; 
+                max-width: 100%;
+            }
+            .logo {
+                max-width: 120px;
+            }
+            .section h3 {
+                font-size: 1rem;
+            }
+            .item-row {
+                flex-direction: column;
+            }
+            .item-field {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay">
+        <header class="header-text">
+            <img src="{{ url_for('static', filename='hotel_logo.png') }}" alt="Company Logo" class="logo img-fluid">
+            <h1 style="font-weight: bold; margin: 0;"></h1>
+            <p style="margin: 5px 0; font-size: 0.9rem;">123 Hotel Street, Thane, Mumbai, PIN - 401107<br>Phone: +91-8945678902 | Email: info@bayhotels.com</p>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'error' else 'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form id="bill-form" action="/generate_invoice" method="POST">
+            <div class="section">
+                <h3>Bill To</h3>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label>Customer Name *</label>
+                        <input type="text" name="customer_name" class="form-control" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label>Address</label>
+                        <textarea name="customer_address" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label>Phone</label>
+                        <input type="tel" name="customer_phone" class="form-control">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label>Email</label>
+                        <input type="email" name="customer_email" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Description</h3>
+                <div id="items-container">
+                    <div class="item-row">
+                        <div class="item-field">
+                            <label>Description</label>
+                            <input type="text" name="item_name[]" placeholder="e.g., Room Service" class="form-control item-name" required>
+                        </div>
+                        <div class="item-field">
+                            <label>Qty.</label>
+                            <input type="number" name="quantity[]" placeholder="1" min="1" class="form-control item-qty" required>
+                        </div>
+                        <div class="item-field">
+                            <label>Price (Rs.)</label>
+                            <input type="number" step="0.01" name="amount[]" placeholder="100.00" min="0" class="form-control item-price" required>
+                        </div>
+                        <div class="item-field" style="flex: 0; align-self: flex-end;">
+                            <button type="button" class="btn btn-outline-danger btn-sm remove-item" style="display: none;"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="add-item" class="btn btn-outline-dark mt-3"><i class="fas fa-plus"></i> Add Item</button>
+            </div>
+
+            <button type="submit" class="btn btn-primary"><i class="fas fa-file-invoice"></i> Generate Invoice</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        
+        function checkRowAndToggleRemove(row) {
+            const name = row.querySelector('.item-name').value.trim();
+            const qty = row.querySelector('.item-qty').value.trim();
+            const price = row.querySelector('.item-price').value.trim();
+            const removeBtn = row.querySelector('.remove-item');
+            if (name && qty && price) {
+                removeBtn.style.display = 'inline-block';
+            } else {
+                removeBtn.style.display = 'none';
+            }
+        }
+
+        
+        document.querySelectorAll('.item-row').forEach(row => {
+            row.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', () => checkRowAndToggleRemove(row));
+            });
+        });
+
+        document.getElementById('add-item').addEventListener('click', function () {
+            const container = document.getElementById('items-container');
+            const newRow = document.createElement('div');
+            newRow.className = 'item-row';
+            newRow.innerHTML = `
+                <div class="item-field">
+                    <label>Description</label>
+                    <input type="text" name="item_name[]" placeholder="e.g., Room Service" class="form-control item-name" required>
+                </div>
+                <div class="item-field">
+                    <label>Qty.</label>
+                    <input type="number" name="quantity[]" placeholder="1" min="1" class="form-control item-qty" required>
+                </div>
+                <div class="item-field">
+                    <label>Price (Rs.)</label>
+                    <input type="number" step="0.01" name="amount[]" placeholder="100.00" min="0" class="form-control item-price" required>
+                </div>
+                <div class="item-field" style="flex: 0; align-self: flex-end;">
+                    <button type="button" class="btn btn-outline-danger btn-sm remove-item" style="display: none;"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            container.appendChild(newRow);
+
+            
+            newRow.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', () => checkRowAndToggleRemove(newRow));
+            });
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-item') || e.target.closest('.remove-item')) {
+                e.target.closest('.item-row').remove();
+                const rows = document.querySelectorAll('.item-row');
+                if (rows.length === 1) {
+                    document.querySelector('.remove-item').style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
