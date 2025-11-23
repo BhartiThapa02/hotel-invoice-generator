@@ -26,9 +26,9 @@ Hotel Invoice Generator – Modern Flask Billing System
 
 📸 Screenshots
 
-<p align="center"> <img src="static/screenshots/generated-invoice.png" width="90%"> </p>
-
 <p align="center"> <img src="static/screenshots/hotel-dashboard.png" width="90%"> </p>
+
+<p align="center"> <img src="static/screenshots/generated-invoice.png" width="90%"> </p>
 
 <hr>
 
@@ -119,5 +119,6 @@ This project is licensed under the MIT License.
 If you like this project, consider giving it a ⭐ on GitHub — it helps a lot!
 
 <hr>
+
 
 
